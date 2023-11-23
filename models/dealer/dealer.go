@@ -117,3 +117,47 @@ func (dealer *Dealer) AwardBuyIn(player *Player.Player, amount int) bool {
 
 	return true
 }
+
+// function to distribute cards to a players / dealer
+func (dealer *Dealer) DistributeCards() bool {
+
+	// check if game can be started
+	if !dealer.CanStartGame() {
+		return false
+	}
+
+	// if yes, create a new deck and shuffle it
+	dealer.Deck.ShuffleDeck()
+
+	// deal two cards to each player in sequential order
+	for i := 0; i < 2; i++ {
+		for _, player := range dealer.ActivePlayers {
+			player.HoleCards = append(player.HoleCards, dealer.Deck.DealTopCard())
+		}
+	}
+	// burn a card
+	dealer.Deck.BurnCard()
+	// add 3 cards to community cards
+	for i := 0; i < 3; i++ {
+		dealer.CommunityCards = append(dealer.CommunityCards, dealer.Deck.DealTopCard())
+	}
+	// burn a card
+	dealer.Deck.BurnCard()
+
+	// add 1 card to community cards
+	dealer.CommunityCards = append(dealer.CommunityCards, dealer.Deck.DealTopCard())
+
+	return true
+}
+
+// function to see revealed community cards
+func (dealer *Dealer) PrintCommunityCards() {
+	fmt.Println("Community Cards are:")
+	for _, card := range dealer.CommunityCards {
+		if card.IsRevealed {
+			fmt.Println(card.Rank, "of", card.Suit)
+		} else {
+			fmt.Println("Hidden")
+		}
+	}
+}

@@ -27,8 +27,9 @@ const (
 )
 
 type Card struct {
-	Suit Suit
-	Rank Rank
+	Suit       Suit
+	Rank       Rank
+	IsRevealed bool
 }
 
 // change the default string representation of a suit

@@ -25,6 +25,7 @@ func InitializeDeck() *Deck {
 			var card Cards.Card
 			card.Suit = Cards.Suit(i)
 			card.Rank = Cards.Rank(j)
+			card.IsRevealed = false // initially all cards are hidden
 			deck.cards = append(deck.cards, card)
 		}
 	}
