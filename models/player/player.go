@@ -1,6 +1,8 @@
 package player
 
 import (
+	"fmt"
+
 	Card "github.com/ArragonElessar/PokerMania/models/cards"
 )
 
@@ -16,10 +18,11 @@ const (
 )
 
 type Player struct {
-	FirstName     string
-	LastName      string
-	Money         int
-	TablePosition int
+	FirstName     string `json:"firstName"`
+	LastName      string `json:"lastName"`
+	Money         int    `json:"money"`
+	ChipsValue    int    `json:"chipsvalue"`
+	TablePosition int    `json:"tableposition"`
 	HoleCards     []Card.Card
 }
 
@@ -35,3 +38,15 @@ type Player struct {
 	3.6 Similarly till the game ends
 4. Game Ends, player can choose to continue / leave
 */
+
+// function to create a new player
+func CreateNewPlayer(firstName string, lastName string, money int) *Player {
+
+	// check that at least one of firstname or lastname is non-null
+	if firstName == "" && lastName == "" {
+		fmt.Println("Cannot create a player with no name")
+		return nil
+	}
+
+	return &Player{firstName, lastName, money, -1, -1, []Card.Card{}}
+}

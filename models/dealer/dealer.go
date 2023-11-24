@@ -17,7 +17,7 @@ type Dealer struct {
 	PotMoney       int // TODO Case when there is an all in
 	Name           string
 	CommunityCards []Cards.Card
-	ActivePlayers  []Player.Player
+	ActivePlayers  []*Player.Player
 	SmallBlind     int
 	BigBlind       int
 }
@@ -37,11 +37,32 @@ type Dealer struct {
 11. Check if any player has exited and return back to step 1
 */
 
+// function to create a new dealer
+func CreateNewDealer(name string, smallBlind int) *Dealer {
+
+	// check that name is non-null
+	if name == "" {
+		fmt.Println("Cannot create a dealer with no name")
+		return nil
+	}
+
+	deck := Deck.InitializeDeck()
+	deck.ShuffleDeck()
+
+	return &Dealer{Deck: deck,
+		PotMoney:       0,
+		Name:           name,
+		CommunityCards: []Cards.Card{},
+		ActivePlayers:  []*Player.Player{},
+		SmallBlind:     smallBlind,
+		BigBlind:       2 * smallBlind}
+}
+
 // helper function
 func (dealer *Dealer) isPlayerActive(player *Player.Player) bool {
 
 	for _, p := range dealer.ActivePlayers {
-		if p == player {
+		if p.FirstName == player.FirstName && p.LastName == player.LastName {
 			return true
 		}
 	}
@@ -49,21 +70,21 @@ func (dealer *Dealer) isPlayerActive(player *Player.Player) bool {
 }
 
 // functions to add or remove the players
-func (dealer *Dealer) AddPlayer(player *Player.Player) bool {
+func (dealer *Dealer) AddPlayer(player *Player.Player) int {
 
 	// check if there is any space for the player
 	if len(dealer.ActivePlayers) == MaxPlayers {
 		fmt.Println("Cannot add player, max players reached")
-		return false
+		return -1
 	}
 	// check if this player already exists in the game
 	if dealer.isPlayerActive(player) {
 		fmt.Println("Player is already playing")
-		return false
+		return -2
 	}
 	// add the player to the game
 	dealer.ActivePlayers = append(dealer.ActivePlayers, player)
-	return true
+	return 1
 
 }
 

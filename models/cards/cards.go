@@ -82,7 +82,10 @@ func (rank Rank) String() string {
 	}
 }
 
-// change the default string representation of a card
+// change the default string representation of a card, print only when card is revealed
 func (card Card) String() string {
-	return card.Rank.String() + " of " + card.Suit.String()
+	if card.IsRevealed {
+		return card.Rank.String() + " of " + card.Suit.String()
+	}
+	return "Hidden Card"
 }
